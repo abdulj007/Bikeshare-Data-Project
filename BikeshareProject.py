@@ -3,19 +3,19 @@ import pandas as pd
 import numpy as np
 import datetime
 import time
-from PIL import Image
+
 
 CITY_DATA = { 'chicago': 'chicago.csv',
               'new york city': 'new_york_city.csv',
               'washington': 'washington.csv' }
 st.title("Bikeshare Data Exploration")
-coen = Image.open('munbaik.jpg')
 
-st.image(coen, use_column_width=True)
 st.markdown("""
 This app shows different statistics of Bikeshare data from three cities - Chicago,
-New york city and Washington
+New york city and Washington. 
+- Please select your desired parameters from the left sidebar
 """)
+st.write('-' * 40)
 st.sidebar.header('Select desired City, Month and Day')
 city = st.sidebar.selectbox("Select City", ("chicago", "new york city", "washington"))
 month = st.sidebar.selectbox("Select Month", ("all", "january", "february","march", "april", "may", "june"))
@@ -66,7 +66,7 @@ def time_stats(df):
     Returns:
         None
     """
-
+    st.subheader("Stats for the most frequent times of travel ")
     st.write('\nCalculating The Most Frequent Times of Travel...\n')
     start_time = time.time()
 
@@ -101,7 +101,7 @@ def station_stats(df):
         None
     """
 
-
+    st.subheader("Stats for the most popular stations and trip")
     start_time = time.time()
 
     # TO DO: display most commonly used start station
@@ -119,7 +119,7 @@ def station_stats(df):
     st.write('The most popular end station is: ', popular_end_station)
     st.write('The most popular trip is: ', popular_start_end_station)
     st.write("\nThis took %s seconds." % round((time.time() - start_time), 2))
-
+    st.write('-' * 40)
 
 def trip_duration_stats(df):
     """Displays statistics on the total and average trip duration.
@@ -130,7 +130,7 @@ def trip_duration_stats(df):
     Returns:
         None
     """
-
+    st.subheader("Trip Duration statistics")
     st.write('\nCalculating Trip Duration...\n')
     start_time = time.time()
 
@@ -156,7 +156,7 @@ def user_stats(df):
         None
     """
 
-
+    st.subheader("Users statistics")
     start_time = time.time()
     st.write('\nCalculating User Stats...\n')
     # TO DO: Display counts of user types
@@ -187,22 +187,22 @@ def user_stats(df):
     except KeyError:
         print('Sorry, Birth Year data doesn\'t exist for the specified city')
         st.write('Sorry, Birth Year data doesn\'t exist for the specified city')
-
+    st.write('-' * 40)
 
 
 def display_data(df):
     """Display five rows of data from the user filtered dataset. """
-
+    st.subheader("Check the raw data")
     counter = 0
     userQuestion = st.radio("Do you want to see raw data?", ('Yes', 'No'))
 
         # ques = st.radio("Do you want to see more raw data?", ('Yes', 'No'))
     if userQuestion == 'Yes':
 
-        counter =int(st.number_input("Click the + button to add 5 rows of data",min_value=0, max_value=df.shape[0], step=5, key=0))
+        counter =int(st.number_input("Click the + button to add 5 more rows of data",min_value=0, max_value=df.shape[0], step=5, key=0))
         st.dataframe(df.head(counter))
 
-    elif ques == 'No':
+    elif userQuestion == 'No':
         st.write("Moving On...")
 
 def main():
