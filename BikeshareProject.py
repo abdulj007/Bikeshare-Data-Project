@@ -17,24 +17,29 @@ New york city and Washington.
 """)
 st.write('-' * 40)
 st.sidebar.header('Select desired City, Month and Day')
-city = st.sidebar.selectbox("Select City", ("chicago", "new york city", "washington"))
-month = st.sidebar.selectbox("Select Month", ("all", "january", "february","march", "april", "may", "june"))
-day = st.sidebar.selectbox("Select Day",("all", "Sunday","Monday", "Tuesday","Wednesday","Thursday","Friday","Saturday"))
+global globalCity
+global globalMonth
+global globalDay
+globalCity = st.sidebar.selectbox("Select City", ("chicago", "new york city", "washington"))
 
-def load_data(city, month, day):
+globalMonth = st.sidebar.selectbox("Select Month", ("all", "january", "february","march", "april", "may", "june"))
+
+globalDay = st.sidebar.selectbox("Select Day",("all", "Sunday","Monday", "Tuesday","Wednesday","Thursday","Friday","Saturday"))
+
+def load_data(globalCity, globalMonth, globalDay):
     """
     Loads data for the specified city and filters by month and day if applicable.
 
     Args:
-        (str) city - name of the city to analyze
-        (str) month - name of the month to filter by, or "all" to apply no month filter
-        (str) day - name of the day of week to filter by, or "all" to apply no day filter
+        (str) globalCity - name of the city to analyze
+        (str) globalMonth - name of the month to filter by, or "all" to apply no month filter
+        (str) globalDay - name of the day of week to filter by, or "all" to apply no day filter
     Returns:
         df - Pandas DataFrame containing city data filtered by month and day
     """
     # load data file into a dataframe
-    df = pd.read_csv(CITY_DATA[city])
-    st.dataframe(df.head())
+    df = pd.read_csv(CITY_DATA[globalCity])
+
     # convert the Start Time column to datetime
     df['Start Time'] = pd.to_datetime(df['Start Time'])
 
@@ -43,16 +48,16 @@ def load_data(city, month, day):
     df['day_of_week'] = df['Start Time'].dt.strftime("%A")
 
     # filter by month
-    if month != 'all':
+    if globalMonth != 'all':
         months = ['january', 'february', 'march', 'april', 'may', 'june']
-        month = months.index(month) + 1
-        df = df[df['month'] == month]
+        globalMonth = months.index(globalMonth) + 1
+        df = df[df['month'] == globalMonth]
 
     # filter by day of week
-    if day != 'all':
+    if globalDay != 'all':
         # filter by day of week to create the new dataframe
 
-        df = df[df['day_of_week'] == day.title()]
+        df = df[df['day_of_week'] == globalDay.title()]
 
     return df
 
@@ -89,8 +94,25 @@ def time_stats(df):
     st.write('The most popular hour is: ', popular_hour)
     st.write("\nThis took %s seconds." % round((time.time() - start_time),2))
     st.write('-' * 40)
+    hour_df = pd.DataFrame(df['hour'].value_counts())
+    day_df = pd.DataFrame(df['day_of_week'].value_counts())
+    month_df = pd.DataFrame(df['month'].value_counts())
 
-
+    st.subheader('The most popular hour visualized')
+    st.write('horizontal axis is hour, vertical axis is the number of start times for each hour')
+    st.bar_chart(hour_df)
+    if globalDay == 'all':
+        st.subheader('The most popular days visualized')
+        st.write('horizontal axis is day, vertical axis is the number of start times for each day')
+        st.bar_chart(day_df)
+    else:
+        pass
+    if globalMonth == 'all':
+        st.subheader('The most popular month visualized')
+        st.write('horizontal axis is month, vertical axis is the number of start times for each month')
+        st.bar_chart(month_df)
+    else:
+        pass
 def station_stats(df):
     """Displays statistics on the most popular stations and trip.
 
@@ -191,12 +213,12 @@ def user_stats(df):
 
 
 def display_data(df):
-    """Display five rows of data from the user filtered dataset. """
+    """Display five rows of data from the filtered dataset at the request of the user. """
     st.subheader("Check the raw data")
     counter = 0
-    userQuestion = st.radio("Do you want to see raw data?", ('Yes', 'No'))
+    userQuestion = st.selectbox("Do you want to see raw data?", options=['No', 'Yes'])
 
-        # ques = st.radio("Do you want to see more raw data?", ('Yes', 'No'))
+        # ques = st.radio("Do you want to see more raw data?", ('No', 'Yes'))
     if userQuestion == 'Yes':
 
         counter =int(st.number_input("Click the + button to add 5 more rows of data",min_value=0, max_value=df.shape[0], step=5, key=0))
@@ -208,7 +230,7 @@ def display_data(df):
 def main():
 
 
-    df = load_data(city, month, day)
+    df = load_data(globalCity, globalMonth, globalDay)
 
     time_stats(df)
     station_stats(df)
