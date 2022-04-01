@@ -1,6 +1,8 @@
 # Bikeshare-Data-Project
 
-This webapp displays descriptive statistics for three cities - Chicago, New york city and washington
+This webapp displays descriptive statistics on bike share usage patterns for three major cities in the United States - Chicago, New york city and Washington.
+
+The datasets where obtained from https://www.motivateco.com/, a bike share system provider for many major cities in the United States
 
 The webapp was built in python using the libraries listed below:
   - streamlit
