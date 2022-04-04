@@ -8,7 +8,7 @@ The webapp was built in python using the libraries listed below:
   - streamlit
   - pandas
   - numpy
-  - PIL
+  
   
 ## Viewing the app
 You can view the web application here: https://bikeshare-data-app.herokuapp.com/
