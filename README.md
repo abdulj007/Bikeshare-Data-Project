@@ -4,7 +4,7 @@ This webapp displays descriptive statistics on bike share usage patterns for thr
 
 The datasets where obtained from https://www.motivateco.com/, a bike share system provider for some major cities in the United States
 
-The webapp was built in python using the libraries listed below:
+The webapp was built with python using the libraries listed below:
   - streamlit
   - pandas
   - numpy
